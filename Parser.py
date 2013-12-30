@@ -18,7 +18,7 @@ WeaponsLoaded  = False
 DefensesLoaded = False
 
 #top level structures for loading all necessary information
-WeaponData = list()
+WeaponData  = list()
 DefenseData = list()
 
 #Parsing module for getting descriptors of weapons, defenses and a basic hull out of the Endless Space xmls
@@ -50,16 +50,16 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  WeaponData[counter].Accuracy = Sim[0].attributes['Accuracy'].value
 	  for subtype in Sim:
 	    Range = subtype.childNodes[3].toxml() #childNodes[3] -> range
-	    Type = subtype.childNodes[1].toxml() #childNodes[1] -> Weapon type
+	    Type  = subtype.childNodes[1].toxml() #childNodes[1] -> Weapon type
 	    if(Range.find('Long')     >= 0): WeaponData[counter].Range = 1
 	    elif(Range.find('Medium') >= 0): WeaponData[counter].Range = 2
 	    elif(Range.find('Short')  >= 0): WeaponData[counter].Range = 3
 	    if(Type.find('Kinetic')   >= 0): WeaponData[counter].Type = 1
 	    elif(Type.find('Laser')   >= 0): WeaponData[counter].Type = 2
 	    elif(Type.find('Missile') >= 0): WeaponData[counter].Type = 3
-	  WeaponData[counter].Cost = node.attributes['Cost'].value
+	  WeaponData[counter].Cost    = node.attributes['Cost'].value
 	  WeaponData[counter].Tonnage = node.attributes['WeightFlat'].value	
-	  WeaponData[counter].Level = node.attributes['Level'].value  
+	  WeaponData[counter].Level   = node.attributes['Level'].value  
 	  counter += 1 #get ready for the next entry
   #part 2: defenses
   if(files == 'DefenseModule.xml'):
@@ -72,17 +72,17 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  DefenseData.append(Defense.struct()) #extend list of ROOT readable structs
 	  Sim = node.getElementsByTagName('Simulation')
 	  #enter all the values into the struct
-	  DefenseData[counter].Name     = node.attributes['Name'].value
-	  DefenseData[counter].Intercept   = Sim[0].attributes['InterceptionAccuracy'].value
-	  DefenseData[counter].Deflection   = Sim[0].attributes['DeflectionPerTurn'].value
+	  DefenseData[counter].Name       = node.attributes['Name'].value
+	  DefenseData[counter].Intercept  = Sim[0].attributes['InterceptionAccuracy'].value
+	  DefenseData[counter].Deflection = Sim[0].attributes['DeflectionPerTurn'].value
 	  DefenseData[counter].Absorption = Sim[0].attributes['Absorption'].value
-	  DefenseData[counter].Defense  = Sim[0].attributes['Defense'].value
+	  DefenseData[counter].Defense    = Sim[0].attributes['Defense'].value
 	  for subtype in Sim:
 	    Type = subtype.childNodes[1].toxml() #childNodes[1] -> Defense type
-	    if(Type.find('Kinetic')   >= 0): DefenseData[counter].Type = 1
-	    elif(Type.find('Laser')   >= 0): DefenseData[counter].Type = 2
-	    elif(Type.find('Missile') >= 0): DefenseData[counter].Type = 3
-	  DefenseData[counter].Cost = node.attributes['Cost'].value
+	    if(Type.find('Kinetic')    >= 0): DefenseData[counter].Type = 1
+	    elif(Type.find('Laser')    >= 0): DefenseData[counter].Type = 2
+	    elif(Type.find('Missile')  >= 0): DefenseData[counter].Type = 3
+	  DefenseData[counter].Cost    = node.attributes['Cost'].value
 	  DefenseData[counter].Tonnage = node.attributes['WeightFlat'].value	  
-	  DefenseData[counter].Level = node.attributes['Level'].value
+	  DefenseData[counter].Level   = node.attributes['Level'].value
 	  counter += 1 #get ready for the next entry
