@@ -4,33 +4,16 @@ import Defense
 import Hull
 from xml.dom import minidom
 
-from optparse import OptionParser
-
-parser = OptionParser()
-
-parser.add_option('--XmlDirectory', metavar='F', type='string', action='store', default='/tmp/mnt/Simulation', dest='XmlDirectory', help='specify input directory for Endless Space xml files')
-
-(options, args) = parser.parse_args()
-
-argv = []
-
-#safeguard bools to kill the program before it does segmentation faults due to missing files
-WeaponsLoaded  = False
-DefensesLoaded = False
-HullLoaded = False
-
-#top level structures for loading all necessary information
-WeaponData  = list()
-DefenseData = list()
-HullData = list()
-
 #Parsing module for getting descriptors of weapons, defenses and a basic hull out of the Endless Space xmls
-for files in os.listdir(options.XmlDirectory): #loading all xml files
-  if(files[len(files)-3:len(files)] != 'xml'): continue #ascertain to only load xml files
-  #part 1: weapons
-  if(files == 'WeaponModule.xml'):
-	WeaponsLoaded = True
-	xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in WeaponModule.xml
+
+#part 1: weapons
+def LoadWeapons(path):
+  #top level structure for loading all necessary information
+  WeaponData  = list()
+  for files in os.listdir(path): #loading all xml files
+    if(files[len(files)-3:len(files)] != 'xml'): continue #ascertain to only load xml files
+    if(files == 'WeaponModule.xml'):
+	xml = minidom.parse(path + '/' + files) #read in WeaponModule.xml
 	WeaponsList = xml.getElementsByTagName('WeaponModule') #read in WeaponModules
 	counter = 0
 	for node in WeaponsList:
@@ -64,10 +47,17 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  WeaponData[counter].Tonnage = node.attributes['WeightFlat'].value	
 	  WeaponData[counter].Level   = node.attributes['Level'].value  
 	  counter += 1 #get ready for the next entry
-  #part 2: defenses
-  if(files == 'DefenseModule.xml'):
-	DefensesLoaded = True
-        xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in DefenseModule.xml
+  if(len(WeaponData)>1): return WeaponData
+  else: return -1
+
+#part 2: defenses
+def ChargeDefenses(path):
+  #top level structure for loading all necessary information
+  DefenseData  = list()
+  for files in os.listdir(path): #loading all xml files
+    if(files[len(files)-3:len(files)] != 'xml'): continue #ascertain to only load xml files
+    if(files == 'DefenseModule.xml'):
+        xml = minidom.parse(path + '/' + files) #read in DefenseModule.xml
 	DefensesList = xml.getElementsByTagName('DefenseModule') #read in DefenseModules
 	counter = 0
 	for node in DefensesList:
@@ -89,10 +79,18 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  DefenseData[counter].Tonnage = node.attributes['WeightFlat'].value	  
 	  DefenseData[counter].Level   = node.attributes['Level'].value
 	  counter += 1 #get ready for the next entry
-  #part 3: hulls
-  if(files == 'Hull.xml'):
+  if(len(DefenseData)>1): return DefenseData
+  else: return -1
+
+#part 3: hulls
+def BuildHulls(path):
+  #top level structure for loading all necessary information
+  HullData  = list()
+  for files in os.listdir(path): #loading all xml files
+    if(files[len(files)-3:len(files)] != 'xml'): continue #ascertain to only load xml files
+    if(files == 'Hull.xml'):
 	HullLoaded = True
-	xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in Hull.xml
+	xml = minidom.parse(path + '/' + files) #read in Hull.xml
 	HullList = xml.getElementsByTagName('Hull') #read in Hull
 	counter = 0
 	for node in HullList:
@@ -122,3 +120,5 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  HullData[counter].EvasionDisorientation = node.attributes['EvasionDisorientation'].value
 	  HullData[counter].Cost  		  = node.attributes['Cost'].value
 	  counter += 1 #get ready for the next entry
+  if(len(HullData)>1): return HullData
+  else: return -1
