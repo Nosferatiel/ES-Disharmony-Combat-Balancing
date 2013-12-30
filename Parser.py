@@ -1,5 +1,6 @@
 import os
 import Weapon
+import Defense
 from xml.dom import minidom
 
 from optparse import OptionParser
@@ -18,6 +19,7 @@ DefensesLoaded = False
 
 #top level structures for loading all necessary information
 WeaponData = list()
+DefenseData = list()
 
 #Parsing module for getting descriptors of weapons, defenses and a basic hull out of the Endless Space xmls
 for files in os.listdir(options.XmlDirectory): #loading all xml files
@@ -56,8 +58,31 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	    elif(Type.find('Laser')   >= 0): WeaponData[counter].Type = 2
 	    elif(Type.find('Missile') >= 0): WeaponData[counter].Type = 3
 	  WeaponData[counter].Cost = node.attributes['Cost'].value
-	  WeaponData[counter].Tonnage = node.attributes['WeightFlat'].value	  
+	  WeaponData[counter].Tonnage = node.attributes['WeightFlat'].value	
+	  WeaponData[counter].Level = node.attributes['Level'].value  
 	  counter += 1 #get ready for the next entry
   #part 2: defenses
   if(files == 'DefenseModule.xml'):
 	DefensesLoaded = True
+        xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in DefenseModule.xml
+	DefensesList = xml.getElementsByTagName('DefenseModule') #read in DefenseModules
+	counter = 0
+	for node in DefensesList:
+	  name = node.attributes['Name'].value
+	  DefenseData.append(Defense.struct()) #extend list of ROOT readable structs
+	  Sim = node.getElementsByTagName('Simulation')
+	  #enter all the values into the struct
+	  DefenseData[counter].Name     = node.attributes['Name'].value
+	  DefenseData[counter].Intercept   = Sim[0].attributes['InterceptionAccuracy'].value
+	  DefenseData[counter].Deflection   = Sim[0].attributes['DeflectionPerTurn'].value
+	  DefenseData[counter].Absorption = Sim[0].attributes['Absorption'].value
+	  DefenseData[counter].Defense  = Sim[0].attributes['Defense'].value
+	  for subtype in Sim:
+	    Type = subtype.childNodes[1].toxml() #childNodes[1] -> Defense type
+	    if(Type.find('Kinetic')   >= 0): DefenseData[counter].Type = 1
+	    elif(Type.find('Laser')   >= 0): DefenseData[counter].Type = 2
+	    elif(Type.find('Missile') >= 0): DefenseData[counter].Type = 3
+	  DefenseData[counter].Cost = node.attributes['Cost'].value
+	  DefenseData[counter].Tonnage = node.attributes['WeightFlat'].value	  
+	  DefenseData[counter].Level = node.attributes['Level'].value
+	  counter += 1 #get ready for the next entry
