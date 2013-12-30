@@ -1,6 +1,7 @@
 import os
 import Weapon
 import Defense
+import Hull
 from xml.dom import minidom
 
 from optparse import OptionParser
@@ -16,10 +17,12 @@ argv = []
 #safeguard bools to kill the program before it does segmentation faults due to missing files
 WeaponsLoaded  = False
 DefensesLoaded = False
+HullLoaded = False
 
 #top level structures for loading all necessary information
 WeaponData  = list()
 DefenseData = list()
+HullData = list()
 
 #Parsing module for getting descriptors of weapons, defenses and a basic hull out of the Endless Space xmls
 for files in os.listdir(options.XmlDirectory): #loading all xml files
@@ -85,4 +88,37 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  DefenseData[counter].Cost    = node.attributes['Cost'].value
 	  DefenseData[counter].Tonnage = node.attributes['WeightFlat'].value	  
 	  DefenseData[counter].Level   = node.attributes['Level'].value
+	  counter += 1 #get ready for the next entry
+  #part 3: hulls
+  if(files == 'Hull.xml'):
+	HullLoaded = True
+	xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in Hull.xml
+	HullList = xml.getElementsByTagName('Hull') #read in Hull
+	counter = 0
+	for node in HullList:
+	  name = node.attributes['Name'].value
+	  if(name.find('Terran')      >= 0): continue #skip all UE racial hulls
+	  if(name.find('Hissho')      >= 0): continue #skip all Hissho racial hulls
+	  if(name.find('Swarm')       >= 0): continue #skip all Craver racial hulls
+	  if(name.find('Emperor')     >= 0): continue #skip all Sheredyn racial hulls
+	  if(name.find('Sophon')      >= 0): continue #skip all Sophon racial hulls
+	  if(name.find('Horatio')     >= 0): continue #skip all Horatio racial hulls
+	  if(name.find('Sower')       >= 0): continue #skip all Sower racial hulls
+	  if(name.find('Amoeba')      >= 0): continue #skip all Amoeba racial hulls
+	  if(name.find('Resistance')  >= 0): continue #skip all Pilgrm racial hulls
+	  if(name.find('Automaton')   >= 0): continue #skip all Automaton racial hulls
+	  if(name.find('Harmony')     >= 0): continue #skip all Harmony racial hulls
+	  if(name.find('Vaulter')     >= 0): continue #skip all Vaulter racial hulls
+	  if(name.find('Pirates')     >= 0): continue #skip all Pirate racial hulls
+	  HullData.append(Hull.struct()) #extend list of ROOT readable structs
+	  #enter all the values into the struct
+	  HullData[counter].Name  		  = node.attributes['Name'].value
+	  HullData[counter].MaxHealth  		  = node.attributes['MaxHealth'].value
+	  HullData[counter].Tonnage 	 	  = node.attributes['MaxWeight'].value
+	  HullData[counter].MaxSpecialSlotWeight  = node.attributes['MaxSpecialSlotWeight'].value
+	  HullData[counter].CommandPoint 	  = node.attributes['CommandPoint'].value
+	  HullData[counter].Evasion 		  = node.attributes['Evasion'].value
+	  HullData[counter].HullWeakness	  = node.attributes['HullWeakness'].value
+	  HullData[counter].EvasionDisorientation = node.attributes['EvasionDisorientation'].value
+	  HullData[counter].Cost  		  = node.attributes['Cost'].value
 	  counter += 1 #get ready for the next entry
