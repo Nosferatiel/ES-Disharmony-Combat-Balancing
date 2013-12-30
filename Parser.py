@@ -117,7 +117,7 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
 	  HullData[counter].Tonnage 	 	  = node.attributes['MaxWeight'].value
 	  HullData[counter].MaxSpecialSlotWeight  = node.attributes['MaxSpecialSlotWeight'].value
 	  HullData[counter].CommandPoint 	  = node.attributes['CommandPoint'].value
-	  HullData[counter].Evasion 		  = node.attributes['Evasion'].value
+	  HullData[counter].Evade 		  = node.attributes['Evade'].value
 	  HullData[counter].HullWeakness	  = node.attributes['HullWeakness'].value
 	  HullData[counter].EvasionDisorientation = node.attributes['EvasionDisorientation'].value
 	  HullData[counter].Cost  		  = node.attributes['Cost'].value
