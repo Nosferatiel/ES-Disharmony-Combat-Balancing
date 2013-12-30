@@ -8,3 +8,4 @@ class struct:
 		self.Type       = 0 #1 kinetic, 2 laser, 3 missile
 		self.Cost       = 0
 		self.Tonnage    = 0
+		self.Level	= 0
