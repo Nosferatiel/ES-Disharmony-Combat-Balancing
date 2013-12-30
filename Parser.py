@@ -23,6 +23,7 @@ for files in os.listdir(options.XmlDirectory): #loading all xml files
   if(files[len(files)-3:len(files)] != 'xml'): continue #ascertain to only load xml files
   #part 1: weapons
   if(files == 'WeaponModule.xml'):
+	WeaponsLoaded = True
 	xml = minidom.parse(options.XmlDirectory+ '/' + files) #read in WeaponModule.xml
 	WeaponsList = xml.getElementsByTagName('WeaponModule') #read in WeaponModules
 	counter = 0
