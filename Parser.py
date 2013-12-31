@@ -116,7 +116,7 @@ def BuildHulls(path):
 	  HullData[counter].MaxSpecialSlotWeight  = node.attributes['MaxSpecialSlotWeight'].value
 	  HullData[counter].CommandPoint 	  = node.attributes['CommandPoint'].value
 	  HullData[counter].Evade 		  = node.attributes['Evade'].value
-	  HullData[counter].HullWeakness	  = node.attributes['HullWeakness'].value
+	  HullData[counter].Weakness	  	  = node.attributes['HullWeakness'].value
 	  HullData[counter].EvasionDisorientation = node.attributes['EvasionDisorientation'].value
 	  HullData[counter].Cost  		  = node.attributes['Cost'].value
 	  counter += 1 #get ready for the next entry
