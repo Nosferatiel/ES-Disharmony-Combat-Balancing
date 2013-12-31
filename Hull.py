@@ -6,6 +6,6 @@ class struct:
 		self.MaxSpecialSlotWeight	= 0
 		self.CommandPoint		= 0
 		self.Evade			= 0
-		self.HullWeakness	 	= 0
+		self.Weakness	 		= 0
 		self.EvasionDisorientation	= 0
 		self.Cost 			= 0
